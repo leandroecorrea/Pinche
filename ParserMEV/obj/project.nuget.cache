@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "AUngykuCl2jgp84o+pCGWPOORu4KaGIuFSoJz/gsRhvklxU0BsPJcmypRCG+qnEXNhGpYBs9PvSzXmRpTv4wSQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\lcorrea\\Documents\\Azure\\ParserMEV\\ParserMEV\\ParserMEV.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\lcorrea\\.nuget\\packages\\htmlagilitypack\\1.11.46\\htmlagilitypack.1.11.46.nupkg.sha512"
+  ],
+  "logs": []
+}
