@@ -15,3 +15,4 @@ C:\Users\lcorrea\Documents\Azure\ParserMEV\ParserMEV\obj\Debug\net6.0\refint\Par
 C:\Users\lcorrea\Documents\Azure\ParserMEV\ParserMEV\obj\Debug\net6.0\ParserMEV.pdb
 C:\Users\lcorrea\Documents\Azure\ParserMEV\ParserMEV\obj\Debug\net6.0\ParserMEV.genruntimeconfig.cache
 C:\Users\lcorrea\Documents\Azure\ParserMEV\ParserMEV\obj\Debug\net6.0\ref\ParserMEV.dll
+C:\Users\lcorrea\Documents\Azure\ParserMEV\ParserMEV\bin\Debug\net6.0\CsvHelper.dll
