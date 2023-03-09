@@ -17,7 +17,6 @@ public class CookieProvider
 
             var httpResponse = await httpClient.GetAsync("https://mev.scba.gov.ar/loguin.asp");
             httpResponse.EnsureSuccessStatusCode();
-
             var cookie = cookieContainer.GetCookies(httpResponse.RequestMessage.RequestUri).FirstOrDefault();
             return new Cookie(cookie.Name, cookie.Value, "/", "mev.scba.gov.ar");
         }

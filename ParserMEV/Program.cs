@@ -1,30 +1,60 @@
-﻿using System.IO.Compression;
-using System.Net;
-using System.Reflection.PortableExecutable;
-using CsvHelper;
+﻿using System.Text;
+using System.Text.Json;
 using HtmlAgilityPack;
 
 
-
-
-
-var htmlContent = HTML.html;
+var home = HTML.home;
 var htmlDocument = new HtmlDocument();
-htmlDocument.LoadHtml(htmlContent);
 
-var options = htmlDocument.DocumentNode.SelectNodes("//option").Select(x => x.Attributes["value"].Value).ToList();
-//var y = options.Select(x => new
+
+//htmlDocument.LoadHtml(home);
+
+//var options = htmlDocument.DocumentNode.SelectNodes("//option").Select(x => x.Attributes["value"].Value).ToList();
+//var deptos = htmlDocument.DocumentNode.SelectNodes("//h6").Select(x => x.InnerText).ToList();
+
+//var count = 0;
+//var loginDistricts = JsonSerializer.Serialize(options.Select(x => new
 //{
-//    Codigo = x.Attributes["value"].Value,
-//    Juzgado = x.ChildNodes.FirstOrDefault()?.InnerText
-//});
-//var deptos = options.Select(x => x.SelectNodes("//h6").FirstOrDefault());
-var deptos = htmlDocument.DocumentNode.SelectNodes("//h6").Select(x=> x.InnerText).ToList();
-
-var count = 0;
-foreach(var option in options)
+//    CreationCode = x.TrimEnd(),
+//    CourtName = deptos[count++].TrimEnd()
+//}).ToList());
+//Console.WriteLine(loginDistricts);
+htmlDocument.LoadHtml(HTML.html);
+var Ids = htmlDocument.DocumentNode.SelectNodes("//option").Select(x => x.Attributes["value"].Value).ToList();
+var fullnames = htmlDocument.DocumentNode.SelectNodes("//h6").Select(x => x.InnerText).ToList();
+var NEWcount = 0;
+var posLoginDistricts = Ids.Select(x => new District
 {
-    Console.WriteLine($"{option},{deptos[count++]}");
+    QueryCode = x.TrimEnd(),
+    DistrictName = fullnames[NEWcount++].TrimEnd()
+}).ToList();
+
+//HASTA ACA
+var user = "lcorrea";
+var password = "iPhone3G";
+
+var cookieProvider = new CookieProvider();
+var cookie = await cookieProvider.GetCookie(user, password);
+await new LoginHandler().Login(cookie);
+
+
+foreach (var district in posLoginDistricts)
+{
+    var document = await new LoginHandler().GetSearchDocumentForDeptoJudicial(cookie, district.QueryCode);
+    var courtNodes = document.DocumentNode.SelectNodes("//select")
+                                        .Where(x => x.Attributes["name"].Value == "JuzgadoElegido")
+                                        .FirstOrDefault()!
+                                        .SelectNodes("//option");
+    foreach (var validCourt in courtNodes.Where(x => !string.IsNullOrEmpty(x.Attributes["value"].Value) && !x.Attributes["value"].Value.Contains("Sin Datos")))
+    {
+        district.Courts.Add(new Court
+        {
+            Fullname = validCourt.InnerText.TrimEnd(),
+            QueryCode = validCourt.Attributes["value"].Value.TrimEnd()
+        });
+    }
+    var json = JsonSerializer.Serialize(district);
+    Console.WriteLine(json);
 }
 
 
@@ -32,17 +62,19 @@ foreach(var option in options)
 
 
 
+public class District
+{    
+    public string QueryCode { get; set; }
+    public string DistrictName { get; set; }
+    public List<Court> Courts { get; set; } = new();
+}
 
+public class Court
+{
+    public string QueryCode { get; set; }
+    public string Fullname { get; set; }
+}
 
-
-
-//var user = "lcorrea";
-//var password = "iPhone3G";
-
-//var cookieProvider = new CookieProvider();
-//var cookie = await cookieProvider.GetCookie(user, password);
-//var loginHandler = new LoginHandler();
-//var respuesta = await loginHandler.GetCookie(user, password, cookie);
 
 
 
