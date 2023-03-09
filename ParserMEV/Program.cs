@@ -4,28 +4,40 @@ using System.Reflection.PortableExecutable;
 using CsvHelper;
 using HtmlAgilityPack;
 
+//var cp = new CookieProvider();
+//var cookie = await cp.GetCookie("lcorrea", "iPhone3G");
+//var lh = new LoginHandler();
+//await lh.GetCookie("lcorrea", "iPhone3G", cookie);
 
 
 
-
-var htmlContent = HTML.html;
+var htmlContent = HTML.searchPage;
 var htmlDocument = new HtmlDocument();
 htmlDocument.LoadHtml(htmlContent);
+var fileNodes = htmlDocument.DocumentNode.SelectNodes("//div[@class='AnchoFijoCaratula']//p//a")
+                                         .Select(x=> new
+                                         {
+                                             Caratula = x.InnerText,
+                                             UrlCausa = x.Attributes["href"].Value
+                                         });
 
-var options = htmlDocument.DocumentNode.SelectNodes("//option").Select(x => x.Attributes["value"].Value).ToList();
-//var y = options.Select(x => new
+var s = "";
+
+
+//var options = htmlDocument.DocumentNode.SelectNodes("//option").Select(x => x.Attributes["value"].Value).ToList();
+////var y = options.Select(x => new
+////{
+////    Codigo = x.Attributes["value"].Value,
+////    Juzgado = x.ChildNodes.FirstOrDefault()?.InnerText
+////});
+////var deptos = options.Select(x => x.SelectNodes("//h6").FirstOrDefault());
+//var deptos = htmlDocument.DocumentNode.SelectNodes("//h6").Select(x=> x.InnerText).ToList();
+
+//var count = 0;
+//foreach(var option in options)
 //{
-//    Codigo = x.Attributes["value"].Value,
-//    Juzgado = x.ChildNodes.FirstOrDefault()?.InnerText
-//});
-//var deptos = options.Select(x => x.SelectNodes("//h6").FirstOrDefault());
-var deptos = htmlDocument.DocumentNode.SelectNodes("//h6").Select(x=> x.InnerText).ToList();
-
-var count = 0;
-foreach(var option in options)
-{
-    Console.WriteLine($"{option},{deptos[count++]}");
-}
+//    Console.WriteLine($"{option},{deptos[count++]}");
+//}
 
 
 
